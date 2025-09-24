@@ -2,17 +2,19 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  // ✅ Prevent Netlify build failures due to ESLint
   eslint: {
-    ignoreDuringBuilds: true, // ✅ Skip lint errors on Netlify
+    ignoreDuringBuilds: true,
   },
 
   async rewrites() {
+    // ✅ Use env var for production (Netlify) and fallback for local dev
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+
     return [
       {
         source: "/api/:path*",
-        destination: `${
-          process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001"
-        }/api/:path*`, // ✅ fallback if env var is missing
+        destination: `${apiUrl}/api/:path*`,
       },
     ];
   },
